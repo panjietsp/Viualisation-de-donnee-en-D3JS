@@ -4,24 +4,11 @@ par_symfony_2
 A Symfony project created on March 24, 2016, 5:13 pm.
 
 ==============
+J'ai mis le controller dans src/Appcontroller; 
+le template dans app/resource; 
+et pour charger les fichier csv; ils sont mis dans web/result;
 
-
-Pour utiliser mysql, 
-Démarrer le serveur mysql 
-```bash
-sudo service mysql start
-```
-
-Créer la base et importer le fichier cassiopeesa/WebASR/symfony.sql dans phpMyAdmin. 
-```bash
-sudo mysqladmin -u root -p create SondageAnciens
-sudo mysql -u root -p -D SondageAnciens <../SondageAnciens.sql
-
-mots de pass: 19931115
-```
-
-
-```bash
+vous pouvez initialiser un nouveaux projet symfony3 et mettre les fichiers cidessus
 php bin/console server:run
 ```
 
