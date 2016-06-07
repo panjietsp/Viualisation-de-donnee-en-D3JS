@@ -1,0 +1,61 @@
+.btn_self {
+
+  margin-top: 25px;
+  
+}
+
+#foot a{
+  float:right;
+  margin-top:20px;
+}
+
+#hello {
+
+display: block; 
+width: 100px;
+height: 30px;
+color:#CCC;
+font-size:16px;
+margin-top: 45px;
+
+}
+
+.hehe {
+  font-size:14px;
+  font-weight:normal;
+}
+
+.text_slide{
+text-align: center;
+font-size: 18px;
+color: blue;
+}
+
+
+/*style de contact*/
+.cacher{display:none}
+.image_position{padding-top:auto; padding-bottom:auto}
+
+
+/*style de sidebar*/
+.side-fix {
+  position: fixed;
+  top: 150;
+  z-index: 1030;
+}
+
+
+
+
+/*style de sondage*/
+.axis path,
+.axis line{
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+
+.axis text {
+	font-family: sans-serif;
+	font-size: 11px;
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}ASR{% endblock %}</title>
+        {% block stylesheets %}
+		<link href="/css/bootstrap.css" rel="stylesheet" />
+		<link href="/css/style.css" rel="stylesheet" />
+                <link href="css/bootstrap.min.css" rel="stylesheet" />
+	{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+
+
+    <body>
+        {% block body %}
+	<div class="container">
+     	{% block head1 %}
+      	   <div id="tete" class="row" style="background-image: url(/image/fd_haut.png);">
+              <div class="col-md-2 col-sm-4 col-xs-6">
+                 <img src="{{ asset('image/logo_TSP_86.png') }}" class="img-responsive" vspace="30">
+       	      </div>
+      	      <div class="col-md-8 col-sm-4 col-xs-6">
+                 <h1 id="big-title" class="text-primary" style="color:#CCC;">VAP ASR</h1>
+        	 <h2 class="text-primary hidden-xs hidden-sm" style="color:#CCC;">Architecte de Services Informatiques Répartis</h2>
+      	      </div>  
+      	      <div class="col-md-2 col-sm-4 hidden-xs">
+         	 <!-- Standard button -->
+	         <a href="https://cas.tem-tsp.eu/cas/login?service=http://localhost:8000/example_simple.php" style="color:#CCC; float:right" class="hidden-xs hidden-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Connectez-Vous</a>
+		 <img id="logo-vap" src="{{ asset('image/asr.jpg') }}" class="img-responsive" vspace="10" style="float:right">
+       	      </div>   
+     	   </div>
+      {% endblock %}
+
+      {% block navigate %}
+      <div id="nas" class="row">
+      <nav id="nav_bar" class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand hehe" href="{{ path('home') }}">Accueil</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Formation <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('pre') }}">Pr&eacute;sentation</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('contenu') }}">Contenu pedagogigue</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('calendrier') }}">Calendrier</a></li>  
+		  <li role="separator" class="divider"></li>
+		  <li><a href="{{ path('projet') }}">Projets</a></li>      
+                </ul>
+              </li>
+                            
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">D&eacute;bouch&eacute;s <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('metier') }}">M&eacute;tiers</a></li>
+                   <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('entreprise') }}">Entreprises</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{path('sondage')}}">Sondage</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('temoinage') }}">T&eacute;moignages</a></li>
+		  <li role="separator" class="divider"></li>
+		  <li><a href="{{ path('stage') }}">Stages</a></li>
+                 
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Entreprises<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('comite_parrainage') }}">Comit&eacute; de parainage</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('conference')}}">Conférences</a></li>
+                
+                  
+                </ul>
+              </li>       
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vie ASR<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('vie_photo') }}">Photos ASR </a></li>
+                  <li><a href="{{ path('vie_etudiant') }}">Etudiants ASR de l'annee</a></li>
+                  
+                </ul>
+              </li>        
+              
+              <li><a href="{{ path('equipe')}}">Equipe</a></li>
+              <!-- <li><a href="{{ path('projet') }}">Projets</a></li> -->
+              <!-- <li><a href="{{ path('stage') }}">Stages</a></li> -->
+	      <li><a href="#">FAQ</a></li>
+              <li><a href="{{ path('contact') }}">Contact</a></li>
+            </ul>
+            
+            <!-- <ul class="nav navbar-nav navbar-right">
+              <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Rechercher...">
+                </div>
+                <button type="submit" class="btn btn-default" ><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+              </form>
+            </ul>  -->
+           </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      	
+        {% block bread %} {% endblock %}
+        </nav>
+	</div>
+	{% endblock %}
+<div id="middle">
+  {% block middle %} {% endblock %}
+</div>
+
+
+
+	{% block foot %}
+		
+		
+      	<div id="foot" class="row" style="background-image: url(/image/fd_bas.png);">
+      
+       	<div class="col-md-4 col-xs-12">
+          <img style="float:left" src="{{ asset ('image/logo_IMT_54x49.png') }}" class="img-responsive" vspace="20"/>
+          <img style="float:left" src="{{ asset ('image/logo_CarnotISN_198x49.png') }}" class="img-responsive" vspace="20"/>
+        </div>
+        
+        <div class="col-md-4 col-xs-12" >
+          <address>
+            <p style="margin-top:20px; color:#CCC;"><strong style="color:#CCC;">Telecom SudParis</strong><br>
+            9 Rue Charles Fourier
+            <br>
+            91000 Évry
+	    <br>
+            <abbr title="Phone">Tel:</abbr> 01 60 76 40 40</p>
+          </address>
+        </div>
+        <div class="col-md-4 col-xs-12" >
+        <a href="#"><img src="{{ asset ('image/facebook.png') }}" class="img-responsive" /></a>
+        <a href="#"><img src="{{ asset ('image/twitter.png') }}" class="img-responsive" /></a>
+        <a href="#"><img src="{{ asset ('image/youtube.png') }}" class="img-responsive" /></a>
+        <a href="#"><img src="{{ asset ('image/rss.png') }}" class="img-responsive" /></a>
+        <a href="#"><img src="{{ asset ('image/linkedin.png') }}" class="img-responsive" /></a>
+        <a href="#"><img src="{{ asset ('image/flickr.png') }}" class="img-responsive" /></a>
+        </div>
+      </div>
+	
+	{% endblock %}
+
+        </div>
+
+
+	{% endblock %}
+
+
+        {% block javascripts %}
+	<script src="/js/jquery.js"></script>
+	<script src="/js/bootstrap.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script>
+	$(window).resize(function(){
+	if( $(window).width() < 768 ) {
+	/* tres petit */
+
+	$("#big-title").attr("style","margin-top:50px; color:#CCC;");
+	$("#nas").show();
+	}
+	
+	if( ($(window).width() > 768)&&($(window).width() <992) ) {
+	/* petit */
+	$("#big-title").attr("style","margin-top:50px; color:#CCC;");
+	$("#logo-vap").attr("vspace","30");
+	$("#big-title").attr("style","margin-top:50px; color:#CCC;");
+	$("#nas").hide();
+	}
+	if( $(window).width() >992 ) {
+	/* moyen ou grand */
+	$("#big-title").attr("style","margin-top:20px; color:#CCC;");
+	$("#logo-vap").attr("vspace","10");
+	$("#nas").show();
+	}
+	});
+	
+
+
+	$(window).scroll(function(){
+	if((($("#middle").height()+ $("#foot").height())> $(window).height()) && ($(window).scrollTop() > $("#tete").height()) ) {
+	$("#nav_bar").addClass("navbar-fixed-top");
+	}
+	else{
+	$("#nav_bar").removeClass("navbar-fixed-top");
+	}
+	});
+	     	
+        {% block selfjs1%} {% endblock %}
+
+        {% block selfjs2%} {% endblock %}
+
+	</script>
+	{% endblock %}
+    </body>
+</html>

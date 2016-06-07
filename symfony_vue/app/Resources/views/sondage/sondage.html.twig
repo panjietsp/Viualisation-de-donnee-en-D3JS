@@ -1,0 +1,497 @@
+{% extends 'layout.html.twig' %}
+
+{% block bread %}
+
+
+{% endblock %}
+      
+       
+{% block content %}
+
+    <h3 id="ttitle">Resultat de sondage de {{path}}</h3>
+    <h3 id="tttitle">Resultat de sondage de {{path}}</h3>
+        <div class="row">    
+    
+        <div class="col-md-10 col-md-offset-2">
+        
+        <span><button class="btn btn-small btn-primary" type="button" onclick='myf(0)'>Salaire par Annee de sortie</button></span>
+        <span><button class="btn btn-small btn-primary" type="button" onclick='myf(1)'>Salaire par Métier</button></span>
+        <span><button class="btn btn-small btn-primary" type="button" onclick='myf(2)'>Repartition des activités professionnelles</button></span>
+        <span><button class="btn btn-small btn-primary" type="button" onclick='myf(3)'>Repartition Géographique</button></span>
+        </div>
+        </div> 
+    
+    <div class="row">    
+    
+    <div id="hello" class="col-md-11" style="height:500px">
+    </div>
+    </div>  
+{% endblock %}
+{% block selfjs2%} 
+
+//var var1=3;
+function myf(var1){
+{% set anne = ['csv_resultat_sondage/',path,'/Salaire_Annee.csv']|join %}
+{% set metier = ['csv_resultat_sondage/',path,'/Salaire_Metier_DernierSondage.csv']|join %}
+{% set nombre = ['csv_resultat_sondage/',path,'/Nombre_Metier_DernierSondage.csv']|join %}
+{% set geographique = ['csv_resultat_sondage/',path,'/Repartition_geographique.csv']|join %}
+    var width = 650;    //width de SVG
+    var height = 400;    //height de SVG
+switch (var1){
+
+case 0:
+
+ //--------------------------------------------salaire par annee de sorti
+    document.getElementById("tttitle").innerHTML="Salaire moyen en fonction de l'année de sortie (en k€)- france seulement";
+//charger cvs fichier 
+        d3.csv("{{ asset (anne)}}", function(error,data){    
+    if(error){
+        console.log(error);}
+    console.log(data);
+
+    
+    
+//extraire les donnees
+    var annee=[];
+    annee[0]=0;
+    var salaire= [];
+    var length_x=[];
+    length_x[0]=0;
+    var str=[];
+    for(var i=0; i<data.length; i++){        
+    annee[i+1]=data[i].Annee_Diplome;
+    salaire[i]=parseFloat(data[i].Salaire_Moyen);
+    length_x[i+1]=(i+1)*(height/data.length);
+    str[i] = data[i].Salaire_Moyen.substring(0,2);
+    }
+    length_x[data.length+1]=height*(1+1/data.length);
+    annee[data.length+1]="0";
+    console.log(annee);
+    console.log(salaire);
+    console.log(length_x);
+
+//commencer la paint
+    d3.select("svg").remove();
+    var svg = d3.select("#hello")        //选择文档中的body元素
+            .append("svg")        //添加一个svg元素
+            .attr("width", width+50)    //设定宽度
+            .attr("height", height+50);    //设定高度
+
+    var linear = d3.scale.linear()        //设置x轴的比例尺,数字化
+               .domain([0, d3.max(salaire)])
+               .range([0, width]);
+
+    var alinear = d3.scale.ordinal()    //设置y轴的比例尺,序列化
+            .domain(annee)
+            .range(length_x);
+
+
+    var rectHeight =(2/3)*(height/data.length) ;    //每个矩形所占的像素高度
+    var color = d3.scale.category10();
+    var rects= svg.selectAll("rect")
+            .data(salaire)
+            .enter()
+            .append("rect")
+            .attr("x",50)
+            .attr("y",function(d,i){
+                return i*height/data.length + rectHeight + 20;
+            })
+            .attr("width",0)
+            .attr("height",rectHeight)
+            .attr("fill",function(d,i){
+                return color(i);
+                 })    
+            .on("mouseover",function(d,i){
+                d3.select(this)
+                  .attr("fill","yellow")
+                  .attr("height",rectHeight*1.2);
+            })
+            .on("mouseout",function(d,i){
+                  d3.select(this)
+                .transition()
+                .duration(500)
+                .attr("fill",function(d,i){
+                    return color(Math.random() * 10);
+                    })
+                .attr("height",rectHeight);
+            })
+            .transition()
+            .duration(2000)
+            .ease("bounce")
+            .attr("width",function(d){
+                return linear(d);
+            });
+
+
+    var texts = svg.selectAll("text")
+        .data(str)
+        .enter()
+        .append("text")
+        .attr("transform","translate(50,0)")
+        .attr("y", function(d,i){
+                return i *height/data.length + (7/6)*(height/data.length) +20;
+            })
+        .attr("x",function(d,i){
+                return linear(d)-50;
+            })
+        
+        .text(function(d){
+            return d;
+        });
+
+
+    var axis = d3.svg.axis()
+             .scale(alinear)        //指定比例尺y轴
+             .orient("left")        //指定刻度的方向
+             .ticks(data.length);    //指定刻度的数量
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(50,20)")
+            .call(axis);
+        
+    var aaxis = d3.svg.axis()
+              .scale(linear)    //指定比例尺x轴
+              .orient("top")    //指定刻度的方向
+              .ticks(10);    //指定刻度的数量
+
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(50,20)")
+            .call(aaxis);
+});
+
+    break;
+case 1:
+    
+    document.getElementById("tttitle").innerHTML="Salaire moyen en fonction de l'activité professionnelle (en k€) - france seulement";
+ //--------------------------------------------salaire par metier
+//加载cvs文件 
+        d3.csv("{{ asset (metier) }}", function(error,data){    
+    if(error){
+        console.log(error);}
+    console.log(data);
+    
+//取出数据
+    var Metier=[];
+    Metier[0]=0;
+    var salaire= [];
+    var length_x=[];
+    length_x[0]=0;
+    var str=[];
+    for(var i=0; i<data.length; i++){        
+    Metier[i+1]=data[i].Metier;
+    salaire[i]=parseFloat(data[i].Salaire_Moyen);
+    length_x[i+1]=(i+1)*(height/data.length);
+    str[i] = data[i].Salaire_Moyen.substring(0,2);
+    }    
+    length_x[data.length+1]=height*(1+1/data.length);
+    Metier[data.length+1]="0";
+    console.log(Metier);
+    console.log(salaire);
+    console.log(length_x);
+//开始画图        
+
+    d3.select("svg").remove();
+    var svg = d3.select("#hello")        //选择文档中的body元素
+            .append("svg")        //添加一个svg元素
+            .attr("width", width+50)    //设定宽度
+            .attr("height", height+50);    //设定高度
+
+    var linear = d3.scale.linear()        //设置x轴的比例尺,数字化
+               .domain([0, d3.max(salaire)])
+               .range([0,width]);
+
+    var alinear = d3.scale.ordinal()    //设置y轴的比例尺,序列化
+            .domain(Metier)
+            .range(length_x);
+
+
+    var rectHeight =(2/3)*(height/data.length) ;    //每个矩形所占的像素高度(包括空白)
+    var color = d3.scale.category10();
+    var rects= svg.selectAll("rect")
+            .data(salaire)
+            .enter()
+            .append("rect")
+            .attr("x",150)
+            .attr("y",function(d,i){
+                return i *height/data.length + rectHeight+20 ;
+            })
+            .attr("width",0)
+            .attr("height",rectHeight)
+            .attr("fill",function(d,i){
+        return color(i);
+         })    
+            .on("mouseover",function(d,i){
+                d3.select(this)
+                  .attr("fill","yellow")
+                  .attr("height",rectHeight*1.2);
+            })
+            .on("mouseout",function(d,i){
+                  d3.select(this)
+                .transition()
+                .duration(500)
+                .attr("fill",function(d,i){
+        return color(Math.random() * 10);
+         })
+                .attr("height",rectHeight);
+            })
+            .transition()
+            .duration(2000)
+            .ease("bounce")
+            .attr("width",function(d){
+                return linear(d);
+            });
+
+
+    var texts = svg.selectAll("text")
+        .data(str)
+        .enter()
+        .append("text")
+        .attr("transform","translate(100,20)")
+        .attr("y", function(d,i){
+                return i *height/data.length + (7/6)*(height/data.length);
+            })
+        .attr("x",function(d,i){
+                return linear(d);
+            })
+        
+        .text(function(d){
+            return d;
+        });
+
+
+    var axis = d3.svg.axis()
+             .scale(alinear)        //指定比例尺y轴
+             .orient("left")        //指定刻度的方向
+             .ticks(data.length);    //指定刻度的数量
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(150,20)")
+            .call(axis);
+        
+    var aaxis = d3.svg.axis()
+              .scale(linear)    //指定比例尺x轴
+              .orient("top")    //指定刻度的方向
+              .ticks(10);    //指定刻度的数量
+
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(150,20)")
+            .call(aaxis);
+});
+
+
+
+    break;
+case 2:
+    document.getElementById("tttitle").innerHTML="Répartition des anciens élèves en fonction de leurs métiers";
+//--------------------------------------------nombre de personne par metier
+//加载cvs文件 
+        d3.csv("{{ asset (nombre) }}", function(error,data){    
+    if(error){
+        console.log(error);}
+    console.log(data);
+
+
+    
+    //var width = 850;    //画布的宽度
+    //var height = 600;    //画布的高度    
+//取出数据
+    var Metier=[];
+    Metier[0]=0;
+    var Nombre= [];
+    var length_x=[];
+    length_x[0]=0;
+    var str=[];
+    for(var i=0; i<data.length; i++){        
+    Metier[i+1]=data[i].Metier;
+    Nombre[i]=parseFloat(data[i].Nombre_Total);
+    length_x[i+1]=(i+1)*(height/data.length);
+    str[i] = data[i].Nombre_Total;
+    }    
+    length_x[data.length+1]=height*(1+1/data.length);
+    Metier[data.length+1]="0";
+    console.log(Metier);
+    console.log(Nombre);
+    console.log(length_x);
+    console.log(str);
+//开始画图        
+
+    d3.select("svg").remove();
+    var svg = d3.select("#hello")        //选择文档中的body元素
+            .append("svg")        //添加一个svg元素
+            .attr("width", width+50)    //设定宽度
+            .attr("height", height+50);    //设定高度
+
+    var linear = d3.scale.linear()        //设置x轴的比例尺,数字化
+               .domain([0, d3.max(Nombre)])
+               .range([0, width]);
+
+    var alinear = d3.scale.ordinal()    //设置y轴的比例尺,序列化
+            .domain(Metier)
+            .range(length_x);
+
+
+    var rectHeight =(2/3)*(height/data.length) ;    //每个矩形所占的像素高度(包括空白)
+    var color = d3.scale.category10();
+    var rects= svg.selectAll("rect")
+            .data(Nombre)
+            .enter()
+            .append("rect")
+            .attr("x",150)
+            .attr("y",function(d,i){
+                return i *height/data.length + rectHeight+20 ;
+            })
+            .attr("width",0)
+            .attr("height",rectHeight)
+            .attr("fill",function(d,i){
+        return color(i);
+         })    
+            .on("mouseover",function(d,i){
+                d3.select(this)
+                  .attr("fill","yellow")
+                  .attr("height",rectHeight*1.2);
+            })
+            .on("mouseout",function(d,i){
+                  d3.select(this)
+                .transition()
+                .duration(500)
+                .attr("fill",function(d,i){
+        return color(Math.random() * 10);
+         })
+                .attr("height",rectHeight);
+            })
+            .transition()
+            .duration(2000)
+            .ease("bounce")
+            .attr("width",function(d){
+                return linear(d);
+            });
+
+
+    var texts = svg.selectAll("text")
+        .data(str)
+        .enter()
+        .append("text")
+        .attr("transform","translate(100,20)")
+        .attr("y", function(d,i){
+                return i *height/data.length + (7/6)*(height/data.length) ;
+            })
+        .attr("x",function(d,i){
+                return linear(d)+50;
+            })
+        
+        .text(function(d){
+            return d;
+        });
+
+
+    var axis = d3.svg.axis()
+             .scale(alinear)        //指定比例尺y轴
+             .orient("left")        //指定刻度的方向
+             .ticks(data.length);            //指定刻度的数量
+    var x=height-50;//变幻位置
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(150,20)")
+            .call(axis);
+        
+    var aaxis = d3.svg.axis()
+              .scale(linear)    //指定比例尺y轴
+              .orient("top")    //指定刻度的方向
+              .ticks(10);    //指定刻度的数量
+
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate(150,20)")
+            .call(aaxis);
+});
+
+
+
+    break;
+case 3:
+
+    document.getElementById("tttitle").innerHTML="Répartition des anciens élèves en fonction de leurs métiers";
+//------------------------------------------------repartition graphique
+//加载数据
+    d3.csv("{{ asset (geographique) }}", function(error,data){    
+    if(error){
+        console.log(error);}
+    console.log(data);
+        
+    //var width = 800;
+    //var height = 800;
+//取出数据
+    
+    var Nombre= [];
+    var str=[];
+    var count=0;
+    for(var i=0; i<data.length; i++){
+    count+=parseFloat(data[i].Nombre);
+    }
+    for(var i=0; i<data.length; i++){        
+    Nombre[i]=parseFloat(data[i].Nombre);
+    str[i] = data[i].Nombre + "("+data[i].Localisation+ (100*Nombre[i]/count).toString().substring(0,2)+"%"+")";
+    }    
+    console.log(count);
+    console.log(Nombre);
+
+//画图    
+    d3.select("svg").remove();
+    var svg = d3.select("#hello")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+    var pie = d3.layout.pie();
+
+    var piedata = pie(Nombre);
+        
+    var outerRadius = 200;    //外半径
+    var innerRadius = 100;    //内半径，为0则中间没有空白
+
+    var arc = d3.svg.arc()    //弧生成器
+            .innerRadius(innerRadius)    //设置内半径
+            .outerRadius(outerRadius);    //设置外半径
+            
+        
+    var color = d3.scale.category10();    //设置颜色
+        
+    var arcs = svg.selectAll("g")        //画虎
+              .data(piedata)
+                     .enter()
+              .append("g")
+              .attr("transform","translate("+ (width/2) +","+ (height/2) +")");
+                      
+    arcs.append("path")        
+        .attr("fill",function(d,i){
+        return color(i);
+         })
+        .attr("d",function(d){
+        return arc(d);
+        });
+       
+        
+    arcs.append("text")
+        .attr("transform",function(d){
+        return "translate(" + arc.centroid(d) + ")";
+        })
+        .attr("text-anchor","middle")
+        .text(function(d,i){
+        console.log(str[i]);
+        return str[i];
+        });
+        
+    console.log(Nombre);
+    console.log(piedata);
+});
+
+    break;
+}
+}
+
+$(document).ready(myf(2));
+{% endblock %}
+
+

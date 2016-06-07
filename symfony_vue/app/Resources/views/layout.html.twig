@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block bread %}
+
+{% endblock %}
+
+{% block middle %}
+
+<div class="row">
+<div class="col-md-9">
+{% block content %}{% endblock %}
+</div>
+<div class="col-md-3">
+{% block sidebar %}
+
+<div  id="guide1" class="panel panel-info">
+  <div class="panel-heading">
+     Nous vous conseillons de continuer lire ...
+  </div>
+  <div class="panel-body">
+     <ul class="list-group">
+
+ {% block conseilsSuite %}
+  <li class="list-group-item"><a href="{{ path('contenu') }}">Contenu pedagogigue</a></li>
+  <li class="list-group-item"><a href="{{ path('calendrier') }}">Calendrier</a></li>
+  <li class="list-group-item"><a href="{{ path('metier') }}">M&eacute;tiers</a></li>
+  {% endblock %}
+
+</ul>
+  </div>
+</div>
+</div>
+
+{% endblock %}</div>
+</div>
+{% endblock %}
+{% block selfjs1%}
+
+$(window).scroll(function(){
+if( ($(window).scrollTop() > $("#tete").height())&&(($("#middle").height()+ $("#foot").height())> $(window).height()) ) {
+$("#guide1").addClass("side-fix");}
+else{
+$("#guide1").removeClass("side-fix");
+}
+});
+
+
+{% endblock %}

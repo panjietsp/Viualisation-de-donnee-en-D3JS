@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: SondageAnciens
+    database_user: root
+    database_password: VA37McRZ
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: VA37McRZ
+    secret: e26dcc2347972185bc3631355d14fe891098e703
